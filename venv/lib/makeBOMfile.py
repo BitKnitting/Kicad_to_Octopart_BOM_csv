@@ -44,7 +44,7 @@ def makeBOMfile(parts):
         #
         # MAKE THESE NUMBER OF PCBs
         #
-        numPCBs = 3
+        numPCBs = 25
         trans = str.maketrans(' :', '_-')
         newInventoryFilename = makeFilepath('inventory_' +
                                             time.asctime().translate(trans)+'.csv')

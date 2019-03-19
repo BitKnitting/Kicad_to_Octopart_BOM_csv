@@ -8,7 +8,7 @@ from utils import makeFilepath
 logger = logging.getLogger(__name__)
 
 
-def makeBOMfile(parts):
+def makeBOMfile(parts,numPCBs):
     def getInventoryInfo(part):
         # Prepare the inventory file.
         inventoryFile = makeFilepath("inventory.csv")
@@ -22,7 +22,13 @@ def makeBOMfile(parts):
                     # bytes encoded as ascii..then decode to str....
                     descBytes = row['Description'].encode('ascii', 'ignore')
                     descStr = descBytes.decode('utf-8')
-                    return(int(row['Quantity']), descStr)
+                    try:
+                        quantity = int(row['Quantity'])
+                        return(quantity, descStr)
+                    except ValueError:
+                        print('{} does not have a valid quantity number'.format(part))
+                        return -1, ''  # Part found, but quantity not an int.
+
         return -1, ''  # part not found
 
     # Open the BoM output file for writing.  If there is at least one row of BoM data, the file will be written.  Info messages are printed for those rows that
@@ -42,9 +48,7 @@ def makeBOMfile(parts):
         # The name will be inventory-<today's date and time>.csv
         #
         #
-        # MAKE THESE NUMBER OF PCBs
-        #
-        numPCBs = 25
+     
         trans = str.maketrans(' :', '_-')
         newInventoryFilename = makeFilepath('inventory_' +
                                             time.asctime().translate(trans)+'.csv')
@@ -76,7 +80,7 @@ def makeBOMfile(parts):
                             quantityNeed == 0 else str(quantityHave-quantityNeed)
                         newInventoryCSV.writerow(
                             (str(part_number), s, description))
-                    else:
+                    else: # The quantity needed is exactly the amount of the quantity on hand.
                         quantityOrder = abs(quantityHave-quantityNeed)
                         logger.info('Need to order {} more of part number: {}'.format(
                             quantityOrder, part_number))

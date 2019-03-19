@@ -16,11 +16,11 @@ def openInputFile(inputFilename):
     except (SystemExit, KeyboardInterrupt):
         raise
     except Exception:
-        logging.error('failed to open file named %s',
+        logging.error('***** EXITING!!! Failed to open file named %s ******',
                       inputFilename, exc_info=True)
-        exit
+        exit(0)
 
 
 def makeFilepath(inputFilename):
     current_dir = dirname(__file__)
-    return(join(current_dir,inputFilename))
+    return(join(current_dir, inputFilename))

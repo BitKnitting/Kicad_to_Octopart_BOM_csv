@@ -8,7 +8,7 @@ from utils import makeFilepath
 logger = logging.getLogger(__name__)
 
 
-def makeBOMfile(parts,numPCBs):
+def makeBOMfile(parts, numPCBs):
     def getInventoryInfo(part):
         # Prepare the inventory file.
         inventoryFile = makeFilepath("inventory.csv")
@@ -48,11 +48,15 @@ def makeBOMfile(parts,numPCBs):
         # The name will be inventory-<today's date and time>.csv
         #
         #
-     
+
         trans = str.maketrans(' :', '_-')
         newInventoryFilename = makeFilepath('inventory_' +
                                             time.asctime().translate(trans)+'.csv')
-        print(newInventoryFilename)
+        print('---------------------------------------------')
+        print("Updated inventory file: {}".format(newInventoryFilename))
+        print('---------------------------------------------')
+        print('BoM CSV: BoMforOctopart.csv')
+        print('---------------------------------------------')
         with open(newInventoryFilename, 'w', newline='') as csv_file:
             newInventoryCSV = csv.writer(csv_file, delimiter=',')
             newInventoryCSV.writerow(('Manf#', 'Quantity', 'Description'))
@@ -62,7 +66,8 @@ def makeBOMfile(parts,numPCBs):
                     # row for this part number.
                     # logStr = 'Writing part number: {} with value: {}'.format(part_number,components[0]['value'])
                     quantityNeed = len(components) * numPCBs
-                    print('part: ', part_number, ' quantity: ', quantityNeed)
+                    print('VALUE: ', components[0]['value'], 'PART: ',
+                          part_number, ' QUANTITY NEEDED: ', quantityNeed)
                     quantityHave, description = getInventoryInfo(
                         part_number)
                     if (quantityHave < 0):
@@ -80,7 +85,7 @@ def makeBOMfile(parts,numPCBs):
                             quantityNeed == 0 else str(quantityHave-quantityNeed)
                         newInventoryCSV.writerow(
                             (str(part_number), s, description))
-                    else: # The quantity needed is exactly the amount of the quantity on hand.
+                    else:  # The quantity needed is exactly the amount of the quantity on hand.
                         quantityOrder = abs(quantityHave-quantityNeed)
                         logger.info('Need to order {} more of part number: {}'.format(
                             quantityOrder, part_number))
@@ -92,6 +97,8 @@ def makeBOMfile(parts,numPCBs):
                 else:
                     print('Skipping part number: {} '.format(
                         part_number))
+                print(
+                    '-------------------------------------------------------------------------')
 ####################################################################################
 
 

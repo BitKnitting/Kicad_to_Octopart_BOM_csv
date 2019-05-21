@@ -1,12 +1,24 @@
 
-# Running
-```python3 makeBOMCSV.py```
-starts it.  You are then asked
+# Getting Started  
+## Make the BoM XML File
+This is done within eeSchema.  This is from version Kicad V5:  
+![BoM dialog in Kicad](images/bom2csv_dialog.png)  
+After running this code, an xml file is created in the same directory as the Kicad project file.
+## Start the Virtual Environment
+* Open a terminal window in the Kicad_to_Octopart project directory.  
+* Activate the venv: ```source venv/bin/activate```  
+* cd into ```venv/lib```
+* Start the script: ```python3 makeBOMCSV.py```
+The script will ask for:
 ```"Enter number of PCBs:"```
 Enter the number of PCBs you are going to order that will need to have parts ordered for them.  
 ```"Enter BoM XML filepath:"```
 This is the full filepath to the XML file eeschema creates.  For example, here is the file path for one of mine:
-```/Users/mj/FitHome/repos/Tishams_PCBs/din_meter_atm90e26/din_meter_atm90e26.xml```
+```/Users/mj/FitHome/repos/Tishams_PCBs/din_meter_atm90e26/din_meter_atm90e26.xml```  
+Assuming valid inputs, the script runs through the components and checks that all the PNs are assigned.  
+* Fix up the schematic.  
+    * It will return which parts need to be checked if it finds components that don't have PN's assigned.
+    * If a component is assigned to a jellybean part and the jellybean part is not listed in the CSV file, it will ask you to add the jellybean part to the file.
 # Output
 The goal is to create a .csv file that can be uploaded to [Octopart's BoM tool](https://octopart.com/?gclid=CjwKCAjwvbLkBRBbEiwAChbckYErg0g5MBmfPbIuRUB2AkxwPabDayXfQrtHbfq3w-aEmAeb_xOHTRoC0g4QAvD_BwE).  [BoMforOctopart.csv](https://github.com/BitKnitting/Kicad_to_Octopart_BOM_csv/blob/master/venv/lib/BoMforOctopart.csv) is an example of the .csv file created from [din_power_atm90e26.xml](https://github.com/BitKnitting/Kicad_to_Octopart_BOM_csv/blob/master/venv/lib/din_power_atm90e26.xml).    
 
